@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class CameraFollow : MonoBehaviour {
+using Mirror;
+public class CameraFollow : NetworkBehaviour {
     GameManager gameManagerInstance_;
     delegate void Initialization();
     Initialization initialization;
@@ -12,15 +12,27 @@ public class CameraFollow : MonoBehaviour {
     [SerializeField] float xOffset;
     [SerializeField] float zOffset;
     [SerializeField] float lerpTime;
+    [SerializeField] LayerMask layersToBeCulledIfHost;
+    [SerializeField] LayerMask layersToBeCulledIfClient;
     // Start is called before the first frame update
     void Start() { 
         initialization += ReferenceInitialization;
         initialization += ObjectInitialization;
         followPlayer += FollowPlayer;
         initialization();
+        DetermineCullingMaskProperties();
     }
     // Update is called once per frame
     void Update() { followPlayer(); }
+    void DetermineCullingMaskProperties() {
+        if(IsHost()) { Camera.main.cullingMask = layersToBeCulledIfHost; }
+        else { Camera.main.cullingMask = layersToBeCulledIfClient; }
+    }
+    bool IsHost() {
+        if(isServer) { return true; }
+        else if(!isServer) { return false; }
+        return false;
+    }
     void ReferenceInitialization() { gameManagerInstance_ = GameManager._instance; }
     void ObjectInitialization() {
         transform.position = new Vector3(transform.position.x, yOffset, transform.position.z);
