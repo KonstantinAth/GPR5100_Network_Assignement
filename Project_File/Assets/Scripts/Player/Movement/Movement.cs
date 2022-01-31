@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 [RequireComponent(typeof(CharacterController))]
-public class Movement : MonoBehaviour
-{
+public class Movement : NetworkBehaviour {
+    public Vector3 startingPosition;
     [Header("Movement Variables & References")]
     [SerializeField] [Range(0, 50)] float moveSpeed;
     [SerializeField] [Range(0, 10)] float rotationSpeed = 5.0f;
@@ -19,13 +20,26 @@ public class Movement : MonoBehaviour
     float horizontalInput;
     float verticalInput;
     CharacterController playerController;
-    private void Start() {
-        playerController = GetComponent<CharacterController>();
-    }
+    ObjectInteractions objectInteractionInstance_;
+    bool isTeleporting = false;
+    private void Start() { ObjectInit(); }
     private void Update() {
-        Move();
-        ApplyGravity();
+        if (isServer) {
+            if (!objectInteractionInstance_.triggeredTrap) {
+                Move();
+                ApplyGravity();
+            }
+        }
     }
+    void ObjectInit() {
+        objectInteractionInstance_ = ObjectInteractions.objectInteractionsInstance;
+        startingPosition = transform.position;
+        playerController = GetComponent<CharacterController>();
+        if(isClient) {
+            GetComponent<Renderer>().enabled = false;
+        }
+    }
+    #region Movement & Drag/Gravity Functions
     void RotateRelativeToInput() {
         Matrix4x4 matrix = Matrix4x4.Rotate(Quaternion.Euler(0.0f, 45.0f, 0.0f));
         fixedRotation = matrix.MultiplyPoint3x4(movement);
@@ -60,6 +74,7 @@ public class Movement : MonoBehaviour
             velocity.y = -0.2f;
         }
     }
+    #endregion
     private void OnDrawGizmos() {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(checkSphereTransform.position, checkSphereRadius);

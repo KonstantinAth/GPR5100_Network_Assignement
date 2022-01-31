@@ -14,6 +14,7 @@ public class CameraFollow : NetworkBehaviour {
     [SerializeField] float lerpTime;
     [SerializeField] LayerMask layersToBeCulledIfHost;
     [SerializeField] LayerMask layersToBeCulledIfClient;
+    [SerializeField] GameObject startingCamera;
     // Start is called before the first frame update
     void Start() { 
         initialization += ReferenceInitialization;
@@ -23,7 +24,16 @@ public class CameraFollow : NetworkBehaviour {
         DetermineCullingMaskProperties();
     }
     // Update is called once per frame
-    void Update() { followPlayer(); }
+    void Update() { 
+        followPlayer();
+        TurnEntryCameraOff();
+    }
+    void TurnEntryCameraOff() {
+        if (NetworkServer.active) {
+            startingCamera.SetActive(false);
+            return;
+        }
+    }
     void DetermineCullingMaskProperties() {
         if(IsHost()) { Camera.main.cullingMask = layersToBeCulledIfHost; }
         else { Camera.main.cullingMask = layersToBeCulledIfClient; }
