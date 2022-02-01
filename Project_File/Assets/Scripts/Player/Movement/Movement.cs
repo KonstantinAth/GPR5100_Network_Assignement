@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(NetworkTransform))]
 public class Movement : NetworkBehaviour {
     public Vector3 startingPosition;
     [Header("Movement Variables & References")]
@@ -14,6 +13,7 @@ public class Movement : NetworkBehaviour {
     [SerializeField] LayerMask groundLayer;
     [SerializeField] Transform checkSphereTransform;
     [SerializeField] float checkSphereRadius = 0.4f;
+    [SerializeField] Renderer[] rend;
     Vector3 movement;
     Vector3 fixedRotation;
     Vector3 velocity;
@@ -35,9 +35,13 @@ public class Movement : NetworkBehaviour {
         objectInteractionInstance_ = ObjectInteractions.objectInteractionsInstance;
         startingPosition = transform.position;
         playerController = GetComponent<CharacterController>();
-        if(isClient) {
-            GetComponent<Renderer>().enabled = false;
-        }
+        #region Might need
+        //if(isClient) {
+        //    for (int i = 0; i < rend.Length; i++) {
+        //        rend[i].enabled = false;
+        //    }
+        //}
+        #endregion
     }
     #region Movement & Drag/Gravity Functions
     void RotateRelativeToInput() {
