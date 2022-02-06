@@ -1,11 +1,11 @@
 using UnityEngine;
 using Mirror;
 [RequireComponent(typeof(CharacterController))]
-[RequireComponent(typeof(NetworkTransform))]
+//[RequireComponent(typeof(NetworkTransform))]
 public class Movement : NetworkBehaviour {
     public Vector3 startingPosition;
     [Header("Movement Variables & References")]
-    [SerializeField] [Range(0, 50)] float moveSpeed;
+    [Range(0, 50)] public float moveSpeed;
     [SerializeField] [Range(0, 10)] float rotationSpeed = 5.0f;
     [Header("Gravity Settings")]
     [SerializeField] float gravity;
@@ -21,11 +21,13 @@ public class Movement : NetworkBehaviour {
     float verticalInput;
     CharacterController playerController;
     ObjectInteractions objectInteractionInstance_;
-    bool isTeleporting = false;
-    private void Start() { ObjectInit(); }
+    public float startingSpeed;
+    private void Start() {
+        ObjectInit();
+    }
     private void Update() {
         if (isServer) {
-            if (!objectInteractionInstance_.triggeredTrap) {
+            if (!objectInteractionInstance_.triggeredTrap && !objectInteractionInstance_.teleporting) {
                 Move();
                 ApplyGravity();
             }
@@ -35,6 +37,7 @@ public class Movement : NetworkBehaviour {
         objectInteractionInstance_ = ObjectInteractions.objectInteractionsInstance;
         startingPosition = transform.position;
         playerController = GetComponent<CharacterController>();
+        startingSpeed = moveSpeed;
         #region Might need
         //if(isClient) {
         //    for (int i = 0; i < rend.Length; i++) {

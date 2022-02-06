@@ -13,20 +13,16 @@ public class Trap : MonoBehaviour {
             objectInteractions = ObjectInteractions.objectInteractionsInstance;
         }
         if(objectInteractions != null) {
-            Debug.Log("OBJECT INTERACTIONS NOT NULL ANYMORE");
             return;
         }
     }
     private void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Player")) {
-            Debug.Log("TRIGGERED");
             FindObjectOfType<ObjectInteractions>().triggeredTrap = true;    
         }
     }
     private void OnTriggerExit(Collider other) {
         if (other.CompareTag("Player")) {
-            Debug.Log("EXITED TRIGGER");
-            //objectInteractions.triggeredTrap = false;
             FindObjectOfType<ObjectInteractions>().triggeredTrap = false;
         }
     }
