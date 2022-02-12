@@ -8,4 +8,5 @@ public class GameManager : MonoBehaviour {
     private void Awake() { _instance = this; }
     #endregion
     public Movement player;
+    public CameraFollow cameraFollow;
 }

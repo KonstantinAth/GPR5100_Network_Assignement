@@ -13,6 +13,8 @@ public class EventManager : MonoBehaviour {
         ObjectInteractions.OnEnteredPortal += ObjectInteractions_OnEnteredPortal;
     }
     private void ObjectInteractions_OnEnteredPortal() {
+        instance.player.transform.position -= transform.forward;
+        instance.cameraFollow.SetPositionToOtherPlayer();
         instance.player = objectInteractions.worldToGoNext.ThisWorldPlayer;
     }
     private void ObjectInteractions_OnEnteredQuicksand() {

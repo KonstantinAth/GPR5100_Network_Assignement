@@ -4,16 +4,22 @@ public class Portal : MonoBehaviour {
     [SerializeField] World worldToGoNext;
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            StartCoroutine(SetTeleport());
+            //StartCoroutine(SetTeleport());
+            FindObjectOfType<ObjectInteractions>().teleporting = true;
             FindObjectOfType<ObjectInteractions>().worldToGoNext = worldToGoNext;
-            worldToGoNext.previousPlayer.gameObject.SetActive(false);
             worldToGoNext.ThisWorldPlayer.enabled = true; 
+        }
+    }
+    private void OnTriggerExit(Collider other) {
+        if (other.CompareTag("Player")) {
+            worldToGoNext.previousPlayer.gameObject.SetActive(false);
+            FindObjectOfType<ObjectInteractions>().teleporting = false;
         }
     }
     IEnumerator SetTeleport()
     {
         FindObjectOfType<ObjectInteractions>().teleporting = true;
-        yield return new WaitForEndOfFrame(); 
+        yield return new WaitForEndOfFrame();
         FindObjectOfType<ObjectInteractions>().teleporting = false;
     }
 }

@@ -47,8 +47,11 @@ public class CameraFollow : NetworkBehaviour {
     void ObjectInitialization() {
         transform.position = new Vector3(transform.position.x, yOffset, transform.position.z);
     }
+    public void SetPositionToOtherPlayer() {
+        transform.position = new Vector3(gameManagerInstance_.player.transform.localPosition.x + xOffset, transform.localPosition.y, gameManagerInstance_.player.transform.localPosition.z + zOffset);
+    }
     void FollowPlayer() {
-        transform.position = Vector3.Lerp(transform.position, new Vector3(gameManagerInstance_.player.transform.position.x + xOffset,
-            transform.position.y, gameManagerInstance_.player.transform.position.z + zOffset), lerpTime * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.localPosition, new Vector3(gameManagerInstance_.player.transform.localPosition.x + xOffset,
+            transform.localPosition.y, gameManagerInstance_.player.transform.localPosition.z + zOffset), lerpTime * Time.deltaTime);
     }
 }
