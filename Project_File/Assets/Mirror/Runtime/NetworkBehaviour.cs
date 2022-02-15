@@ -167,7 +167,7 @@ namespace Mirror
         {
             if (syncObject == null)
             {
-                Debug.LogError("Uninitialized SyncObject. Manually call the constructor on your SyncList, SyncSet, SyncDictionary or SyncField<T>");
+                Debug.LogError("Uninitialized SyncObject. Manually call the constructor on your SyncList, SyncSet or SyncDictionary");
                 return;
             }
 
@@ -198,22 +198,18 @@ namespace Mirror
                 return;
             }
 
-            // previously we used NetworkClient.readyConnection.
-            // now we check .ready separately.
-            if (!NetworkClient.ready)
-            {
-                // Unreliable Cmds from NetworkTransform may be generated,
-                // or client may have been set NotReady intentionally, so
-                // only warn if on the reliable channel.
-                if (channelId == Channels.Reliable)
-                    Debug.LogWarning("Send command attempted while NetworkClient is not ready.\nThis may be ignored if client intentionally set NotReady.");
-                return;
-            }
-
             // local players can always send commands, regardless of authority, other objects must have authority.
             if (!(!requiresAuthority || isLocalPlayer || hasAuthority))
             {
                 Debug.LogWarning($"Trying to send command for object without authority. {invokeClass}.{cmdName}");
+                return;
+            }
+
+            // previously we used NetworkClient.readyConnection.
+            // now we check .ready separately and use .connection instead.
+            if (!NetworkClient.ready)
+            {
+                Debug.LogError("Send command attempted while NetworkClient is not ready.");
                 return;
             }
 
@@ -574,10 +570,20 @@ namespace Mirror
         //   note: SyncVar hooks are only called when inital=false
         public virtual bool OnSerialize(NetworkWriter writer, bool initialState)
         {
+            bool objectWritten = false;
             // if initialState: write all SyncVars.
             // otherwise write dirtyBits+dirty SyncVars
-            bool objectWritten = initialState ? SerializeObjectsAll(writer) : SerializeObjectsDelta(writer);
+            if (initialState)
+            {
+                objectWritten = SerializeObjectsAll(writer);
+            }
+            else
+            {
+                objectWritten = SerializeObjectsDelta(writer);
+            }
+
             bool syncVarWritten = SerializeSyncVars(writer, initialState);
+
             return objectWritten || syncVarWritten;
         }
 

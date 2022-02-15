@@ -8,14 +8,14 @@ namespace kcp2k
     {
         // events
         public Action OnConnected;
-        public Action<ArraySegment<byte>, KcpChannel> OnData;
+        public Action<ArraySegment<byte>> OnData;
         public Action OnDisconnected;
 
         // state
         public KcpClientConnection connection;
         public bool connected;
 
-        public KcpClient(Action OnConnected, Action<ArraySegment<byte>, KcpChannel> OnData, Action OnDisconnected)
+        public KcpClient(Action OnConnected, Action<ArraySegment<byte>> OnData, Action OnDisconnected)
         {
             this.OnConnected = OnConnected;
             this.OnData = OnData;
@@ -27,17 +27,7 @@ namespace kcp2k
         protected virtual KcpClientConnection CreateConnection() =>
             new KcpClientConnection();
 
-        public void Connect(string address,
-                            ushort port,
-                            bool noDelay,
-                            uint interval,
-                            int fastResend = 0,
-                            bool congestionWindow = true,
-                            uint sendWindowSize = Kcp.WND_SND,
-                            uint receiveWindowSize = Kcp.WND_RCV,
-                            int timeout = KcpConnection.DEFAULT_TIMEOUT,
-                            uint maxRetransmits = Kcp.DEADLINK,
-                            bool maximizeSendReceiveBuffersToOSLimit = false)
+        public void Connect(string address, ushort port, bool noDelay, uint interval, int fastResend = 0, bool congestionWindow = true, uint sendWindowSize = Kcp.WND_SND, uint receiveWindowSize = Kcp.WND_RCV, int timeout = KcpConnection.DEFAULT_TIMEOUT)
         {
             if (connected)
             {
@@ -55,10 +45,10 @@ namespace kcp2k
                 connected = true;
                 OnConnected.Invoke();
             };
-            connection.OnData = (message, channel) =>
+            connection.OnData = (message) =>
             {
                 //Log.Debug($"KCP: OnClientData({BitConverter.ToString(message.Array, message.Offset, message.Count)})");
-                OnData.Invoke(message, channel);
+                OnData.Invoke(message);
             };
             connection.OnDisconnected = () =>
             {
@@ -69,17 +59,7 @@ namespace kcp2k
             };
 
             // connect
-            connection.Connect(address,
-                               port,
-                               noDelay,
-                               interval,
-                               fastResend,
-                               congestionWindow,
-                               sendWindowSize,
-                               receiveWindowSize,
-                               timeout,
-                               maxRetransmits,
-                               maximizeSendReceiveBuffersToOSLimit);
+            connection.Connect(address, port, noDelay, interval, fastResend, congestionWindow, sendWindowSize, receiveWindowSize, timeout);
         }
 
         public void Send(ArraySegment<byte> segment, KcpChannel channel)
@@ -131,5 +111,10 @@ namespace kcp2k
             TickIncoming();
             TickOutgoing();
         }
+
+        // pause/unpause to safely support mirror scene handling and to
+        // immediately pause the receive while loop if needed.
+        public void Pause() => connection?.Pause();
+        public void Unpause() => connection?.Unpause();
     }
 }

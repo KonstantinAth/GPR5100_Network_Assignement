@@ -1,23 +1,17 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mirror.Authenticators
 {
     [AddComponentMenu("Network/Authenticators/BasicAuthenticator")]
-    [HelpURL("https://mirror-networking.gitbook.io/docs/components/network-authenticators/basic-authenticator")]
     public class BasicAuthenticator : NetworkAuthenticator
     {
-        [Header("Server Credentials")]
-        public string serverUsername;
-        public string serverPassword;
+        [Header("Custom Properties")]
 
-        [Header("Client Credentials")]
+        // set these in the inspector
         public string username;
         public string password;
-
-        readonly HashSet<NetworkConnection> connectionsPendingDisconnect = new HashSet<NetworkConnection>();
 
         #region Messages
 
@@ -75,12 +69,10 @@ namespace Mirror.Authenticators
         /// <param name="msg">The message payload</param>
         public void OnAuthRequestMessage(NetworkConnection conn, AuthRequestMessage msg)
         {
-            //Debug.Log($"Authentication Request: {msg.authUsername} {msg.authPassword}");
-
-            if (connectionsPendingDisconnect.Contains(conn)) return;
+            // Debug.LogFormat(LogType.Log, "Authentication Request: {0} {1}", msg.authUsername, msg.authPassword);
 
             // check the credentials by calling your web server, database table, playfab api, or any method appropriate.
-            if (msg.authUsername == serverUsername && msg.authPassword == serverPassword)
+            if (msg.authUsername == username && msg.authPassword == password)
             {
                 // create and send msg to client so it knows to proceed
                 AuthResponseMessage authResponseMessage = new AuthResponseMessage
@@ -96,8 +88,6 @@ namespace Mirror.Authenticators
             }
             else
             {
-                connectionsPendingDisconnect.Add(conn);
-
                 // create and send msg to client so it knows to disconnect
                 AuthResponseMessage authResponseMessage = new AuthResponseMessage
                 {
@@ -111,7 +101,7 @@ namespace Mirror.Authenticators
                 conn.isAuthenticated = false;
 
                 // disconnect the client after 1 second so that response message gets delivered
-                StartCoroutine(DelayedDisconnect(conn, 1f));
+                StartCoroutine(DelayedDisconnect(conn, 1));
             }
         }
 
@@ -121,11 +111,6 @@ namespace Mirror.Authenticators
 
             // Reject the unsuccessful authentication
             ServerReject(conn);
-
-            yield return null;
-
-            // remove conn from pending connections
-            connectionsPendingDisconnect.Remove(conn);
         }
 
         #endregion
@@ -174,7 +159,7 @@ namespace Mirror.Authenticators
         {
             if (msg.code == 100)
             {
-                //Debug.Log($"Authentication Response: {msg.message}");
+                // Debug.LogFormat(LogType.Log, "Authentication Response: {0}", msg.message);
 
                 // Authentication has been accepted
                 ClientAccept();

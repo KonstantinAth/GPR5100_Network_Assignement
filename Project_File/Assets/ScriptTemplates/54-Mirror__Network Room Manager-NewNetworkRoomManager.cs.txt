@@ -137,16 +137,19 @@ public class #SCRIPTNAME# : NetworkRoomManager
     /// <summary>
     /// This is called on the client when it connects to server.
     /// </summary>
-    public override void OnRoomClientConnect() { }
+    /// <param name="conn">The connection that connected.</param>
+    public override void OnRoomClientConnect(NetworkConnection conn) { }
 
     /// <summary>
     /// This is called on the client when disconnected from a server.
     /// </summary>
-    public override void OnRoomClientDisconnect() { }
+    /// <param name="conn">The connection that disconnected.</param>
+    public override void OnRoomClientDisconnect(NetworkConnection conn) { }
 
     /// <summary>
     /// This is called on the client when a client is started.
     /// </summary>
+    /// <param name="roomClient">The connection for the room.</param>
     public override void OnRoomStartClient() { }
 
     /// <summary>
@@ -157,7 +160,8 @@ public class #SCRIPTNAME# : NetworkRoomManager
     /// <summary>
     /// This is called on the client when the client is finished loading a new networked scene.
     /// </summary>
-    public override void OnRoomClientSceneChanged() { }
+    /// <param name="conn">The connection that finished loading a new networked scene.</param>
+    public override void OnRoomClientSceneChanged(NetworkConnection conn) { }
 
     /// <summary>
     /// Called on the client when adding a player to the room fails.

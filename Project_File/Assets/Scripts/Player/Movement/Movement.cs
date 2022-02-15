@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 [RequireComponent(typeof(CharacterController))]
-public class Movement : MonoBehaviour
-{
+//[RequireComponent(typeof(NetworkTransform))]
+public class Movement : NetworkBehaviour {
+    public Vector3 startingPosition;
     [Header("Movement Variables & References")]
-    [SerializeField] [Range(0, 50)] float moveSpeed;
+    [Range(0, 50)] public float moveSpeed;
     [SerializeField] [Range(0, 10)] float rotationSpeed = 5.0f;
     [Header("Gravity Settings")]
     [SerializeField] float gravity;
@@ -13,19 +13,40 @@ public class Movement : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
     [SerializeField] Transform checkSphereTransform;
     [SerializeField] float checkSphereRadius = 0.4f;
+    [SerializeField] Renderer[] rend;
     Vector3 movement;
     Vector3 fixedRotation;
     Vector3 velocity;
     float horizontalInput;
     float verticalInput;
     CharacterController playerController;
+    ObjectInteractions objectInteractionInstance_;
+    public float startingSpeed;
     private void Start() {
-        playerController = GetComponent<CharacterController>();
+        ObjectInit();
     }
     private void Update() {
-        Move();
-        ApplyGravity();
+        if (isServer) {
+            if (!objectInteractionInstance_.triggeredTrap && !objectInteractionInstance_.teleporting) {
+                Move();
+                ApplyGravity();
+            }
+        }
     }
+    void ObjectInit() {
+        objectInteractionInstance_ = ObjectInteractions.objectInteractionsInstance;
+        startingPosition = transform.position;
+        playerController = GetComponent<CharacterController>();
+        startingSpeed = moveSpeed;
+        #region Might need
+        //if(isClient) {
+        //    for (int i = 0; i < rend.Length; i++) {
+        //        rend[i].enabled = false;
+        //    }
+        //}
+        #endregion
+    }
+    #region Movement & Drag/Gravity Functions
     void RotateRelativeToInput() {
         Matrix4x4 matrix = Matrix4x4.Rotate(Quaternion.Euler(0.0f, 45.0f, 0.0f));
         fixedRotation = matrix.MultiplyPoint3x4(movement);
@@ -60,6 +81,7 @@ public class Movement : MonoBehaviour
             velocity.y = -0.2f;
         }
     }
+    #endregion
     private void OnDrawGizmos() {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(checkSphereTransform.position, checkSphereRadius);

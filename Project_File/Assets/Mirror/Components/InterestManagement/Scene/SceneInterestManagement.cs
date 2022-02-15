@@ -37,10 +37,11 @@ namespace Mirror
                 RebuildSceneObservers(currentScene);
         }
 
-        // internal so we can update from tests
-        [ServerCallback]
-        internal void Update()
+        void Update()
         {
+            // only on server
+            if (!NetworkServer.active) return;
+
             // for each spawned:
             //   if scene changed:
             //     add previous to dirty
@@ -49,8 +50,7 @@ namespace Mirror
             {
                 Scene currentScene = lastObjectScene[identity];
                 Scene newScene = identity.gameObject.scene;
-                if (newScene == currentScene) 
-                    continue;
+                if (newScene == currentScene) continue;
 
                 // Mark new/old scenes as dirty so they get rebuilt
                 dirtyScenes.Add(currentScene);
@@ -75,7 +75,9 @@ namespace Mirror
 
             // rebuild all dirty scenes
             foreach (Scene dirtyScene in dirtyScenes)
+            {
                 RebuildSceneObservers(dirtyScene);
+            }
 
             dirtyScenes.Clear();
         }
@@ -92,7 +94,8 @@ namespace Mirror
             return identity.gameObject.scene == newObserver.identity.gameObject.scene;
         }
 
-        public override void OnRebuildObservers(NetworkIdentity identity, HashSet<NetworkConnection> newObservers, bool initialize)
+        public override void OnRebuildObservers(NetworkIdentity identity, HashSet<NetworkConnection> newObservers,
+            bool initialize)
         {
             if (!sceneObjects.TryGetValue(identity.gameObject.scene, out HashSet<NetworkIdentity> objects))
                 return;
