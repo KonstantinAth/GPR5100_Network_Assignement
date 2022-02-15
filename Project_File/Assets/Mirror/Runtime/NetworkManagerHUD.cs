@@ -45,9 +45,7 @@ namespace Mirror
                     }
                 }
             }
-
             StopButtons();
-
             GUILayout.EndArea();
         }
 
