@@ -1,0 +1,91 @@
+[33mcommit bd1798d8afdec427f2d3c6fa0e1704d76bb9daea[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: panos tsakmakis <panos_dabest@yahoo.gr>
+Date:   Tue Feb 15 16:56:00 2022 +0200
+
+    menu
+
+[33mcommit a421cf4809417e3a6d2448d1c5d46dc57424652b[m
+Merge: c4a7b539 3ae20928
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Tue Feb 15 13:13:16 2022 +0200
+
+    Merge branch 'main' of github.com:KonstantinAth/GPR5100_Network_Assignement
+
+[33mcommit c4a7b53940d023d0295621bb192b6b1807903ed5[m
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Tue Feb 15 13:06:36 2022 +0200
+
+    Commited Previous Changes
+
+[33mcommit 3ae20928ecb433e5f6db6c3f92f5167115a55524[m
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Sat Feb 12 16:02:37 2022 +0200
+
+    Fixed Transition Between Worlds
+
+[33mcommit a77200d6c266c39f9bd876bafd823e4ba7fd4367[m
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Sun Feb 6 13:04:03 2022 +0200
+
+    Portal & transition between worlds made
+
+[33mcommit bd9c5623f52084b1c473ab4896472fa5de7f8870[m
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Tue Feb 1 02:30:57 2022 +0200
+
+    Small Additions
+
+[33mcommit aea62feeb9283e5c3a773f838f80f50f72d0f13e[m
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Mon Jan 31 20:32:06 2022 +0200
+
+    Small Additions
+
+[33mcommit 071838c4ee097546ae6fbaa3cc5d03c56d6894c8[m
+Merge: f55efea1 f06954b9
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Mon Jan 31 20:27:38 2022 +0200
+
+    Pluggins
+
+[33mcommit f55efea12e40da5d41a501db163f65e75e4db0da[m
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Mon Jan 31 20:25:47 2022 +0200
+
+    Assets/Voice Chat & Additional Functionality
+
+[33mcommit f06954b952285f07ba58d19e1d7942a4f11e0ad3[m
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Wed Jan 19 17:31:15 2022 +0200
+
+    VOICE CHAT BITCHEEES
+
+[33mcommit a6cb4c17b8a5d5789b8ef1cdacf50cadde5a807b[m
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Sun Jan 16 16:56:31 2022 +0200
+
+    Fucked Up No More (No Dissonanse Package Included)
+
+[33mcommit 751015f34be97b32c6db07e0a8dfe7ac3127ca61[m
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Sat Dec 25 11:42:11 2021 +0200
+
+    Demo scene made to test different world ideas
+
+[33mcommit 155c3a9357f5fcf2c9b0f1175b01a44c0fb988a4[m
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Fri Dec 24 13:18:22 2021 +0200
+
+    Movement Complete, Changed Render Pipeline in order to create Shaders, added environments & played with ideas
+
+[33mcommit ae43acd0a90b7c36132615f84a1b17317c36cd43[m
+Author: KonstantinAth <13-13113@saeinstitute.edu>
+Date:   Tue Dec 21 16:54:06 2021 +0200
+
+    Initial Commit
+
+[33mcommit 3ffdffde7b69f2786c9831cd03e397d141261f7b[m
+Author: KonstantinAth <73348304+KonstantinAth@users.noreply.github.com>
+Date:   Tue Dec 21 16:52:10 2021 +0200
+
+    Initial commit
