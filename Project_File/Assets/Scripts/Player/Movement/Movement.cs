@@ -14,6 +14,9 @@ public class Movement : NetworkBehaviour {
     [SerializeField] Transform checkSphereTransform;
     [SerializeField] float checkSphereRadius = 0.4f;
     [SerializeField] Renderer[] rend;
+    public bool IsRunning;
+    [Header("Animation Settings")]
+    Animator characterAnimator;
     Vector3 movement;
     Vector3 fixedRotation;
     Vector3 velocity;
@@ -30,6 +33,7 @@ public class Movement : NetworkBehaviour {
             if (!objectInteractionInstance_.triggeredTrap && !objectInteractionInstance_.teleporting) {
                 Move();
                 ApplyGravity();
+                MovementAnimation();
             }
         }
     }
@@ -38,6 +42,7 @@ public class Movement : NetworkBehaviour {
         startingPosition = transform.position;
         playerController = GetComponent<CharacterController>();
         startingSpeed = moveSpeed;
+        characterAnimator = GetComponent<Animator>();
         #region Might need
         //if(isClient) {
         //    for (int i = 0; i < rend.Length; i++) {
@@ -46,11 +51,19 @@ public class Movement : NetworkBehaviour {
         //}
         #endregion
     }
+    #region Animation Setter
+    void MovementAnimation() {
+        if(horizontalInput != 0 || verticalInput != 0) {
+            IsRunning = true;
+        }
+        else { IsRunning = false; }
+        characterAnimator.SetBool("IsRunning", IsRunning);
+    }
+    #endregion
     #region Movement & Drag/Gravity Functions
     void RotateRelativeToInput() {
         Matrix4x4 matrix = Matrix4x4.Rotate(Quaternion.Euler(0.0f, 45.0f, 0.0f));
         fixedRotation = matrix.MultiplyPoint3x4(movement);
-        Debug.Log($"MATRIX : {matrix}");
         if (movement != Vector3.zero) {
             Vector3 relative = (transform.position + fixedRotation) - transform.position;
             Quaternion rotation = Quaternion.LookRotation(relative, Vector3.up);

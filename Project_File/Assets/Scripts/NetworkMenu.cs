@@ -10,9 +10,6 @@ public class NetworkMenu : NetworkBehaviour {
     GameObject MenuCanvas;
     [SerializeField]
     NetworkManager manager;
-    private void Awake() {
-        manager = GetComponent<NetworkManager>();
-    }
     private void Update() {
         ConnectStatus();
         if (isServer) {
