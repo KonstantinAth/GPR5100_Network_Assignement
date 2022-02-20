@@ -3,7 +3,9 @@ using Mirror;
 [RequireComponent(typeof(CharacterController))]
 //[RequireComponent(typeof(NetworkTransform))]
 public class Movement : NetworkBehaviour {
+    PlayerSoundFX soundFx;
     public Vector3 startingPosition;
+    private RaycastHit hit;
     [Header("Movement Variables & References")]
     [Range(0, 50)] public float moveSpeed;
     [SerializeField] [Range(0, 10)] float rotationSpeed = 5.0f;
@@ -36,6 +38,7 @@ public class Movement : NetworkBehaviour {
                 MovementAnimation();
             }
         }
+        GroundtypeCheck();
     }
     void ObjectInit() {
         objectInteractionInstance_ = ObjectInteractions.objectInteractionsInstance;
@@ -43,6 +46,7 @@ public class Movement : NetworkBehaviour {
         playerController = GetComponent<CharacterController>();
         startingSpeed = moveSpeed;
         characterAnimator = GetComponent<Animator>();
+        soundFx = GetComponent<PlayerSoundFX>();
         #region Might need
         //if(isClient) {
         //    for (int i = 0; i < rend.Length; i++) {
@@ -50,6 +54,37 @@ public class Movement : NetworkBehaviour {
         //    }
         //}
         #endregion
+    }
+    public void GroundtypeCheck()
+    {
+        if(Physics.Raycast(transform.position+transform.up, Vector3.down, out hit, 3f, groundLayer))
+        {
+                if (hit.collider.tag == "Sand")
+                {
+                    soundFx.TagName = "Sand";
+                }
+                else if(hit.collider.tag == "Road")
+                {
+                    soundFx.TagName = "Road";
+                }
+                else if(hit.collider.tag == "Snow")
+                {
+                    soundFx.TagName = "Snow";
+                }
+                else if(hit.collider.tag=="Water")
+                {
+                    soundFx.TagName = "Water";
+                }
+                else if(hit.collider.tag=="Dirt")
+                {
+                soundFx.TagName = "Dirt"; 
+                }
+                else if (hit.collider.tag == "Bush")
+                {
+                soundFx.TagName = "Bush";
+                }
+        }
+        
     }
     #region Animation Setter
     void MovementAnimation() {
@@ -98,5 +133,6 @@ public class Movement : NetworkBehaviour {
     private void OnDrawGizmos() {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(checkSphereTransform.position, checkSphereRadius);
+        Gizmos.DrawRay(transform.position, Vector3.down *3f);
     }
 }
