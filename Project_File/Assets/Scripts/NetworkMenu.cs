@@ -15,19 +15,20 @@ public class NetworkMenu : NetworkBehaviour {
         if (isServer) {
             playersConnected = NetworkServer.connections.Count;
         }
+        Debug.Log(inputField.text);
     }
     public void StartHost()  {
-        manager.StartHost();
+        //manager.StartHost();
+        NetworkManager.singleton.StartHost();
     }
     public void StartClient() {
-        if (inputField.text != null) {
-            manager.networkAddress = inputField.text;
-        }
-        else {
-            inputField.text = manager.networkAddress;
-            manager.networkAddress = inputField.text;
-        }
+
         manager.StartClient();
+        if (inputField.text!="")
+        {
+            Debug.Log("ded");
+            manager.networkAddress = inputField.text;
+        }
     }
     private void ConnectStatus() {
         if (NetworkClient.isConnected && NetworkServer.active) {
@@ -40,4 +41,5 @@ public class NetworkMenu : NetworkBehaviour {
             MenuCanvas.SetActive(false);
         }
     }
+    
 }

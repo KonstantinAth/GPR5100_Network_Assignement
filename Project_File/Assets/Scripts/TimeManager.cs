@@ -41,4 +41,9 @@ public class TimeManager : NetworkBehaviour {
         minutes = Mathf.Floor(timeRemaining / 60);
         timeText.text = $"Time Remaining : {minutes}:{seconds}";
     }
+    
+    void AddExtraTime(int hourglasses)
+    {
+        timeRemaining += timeRemaining * hourglasses / 100;
+    }
 }

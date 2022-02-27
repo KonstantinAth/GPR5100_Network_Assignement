@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerSoundFX : MonoBehaviour
 {
     AudioSource audioSource;
+    [SerializeField] AudioClip pickupClip;
     Dictionary<string, AudioClip[]> clips;
     [SerializeField] AudioClip[] footStepsRoad;
     [SerializeField] AudioClip[] footStepsSand;
@@ -20,6 +21,16 @@ public class PlayerSoundFX : MonoBehaviour
         {
          set => tagName=value;
         }
+
+
+    private void OnEnable()
+    {
+        HourGlass.onHourglassPickupCall += PickUpFX;
+    }
+    private void OnDisable()
+    {
+        HourGlass.onHourglassPickupCall -= PickUpFX;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +52,10 @@ public class PlayerSoundFX : MonoBehaviour
         VolumeControll();
     }
 
+    public void PickUpFX()
+    {
+        audioSource.PlayOneShot(pickupClip);
+    }
     public void FootSoundFx()
     {
         audioSource.PlayOneShot(clips[tagName][UnityEngine.Random.Range(0, clips[tagName].Length)]);
