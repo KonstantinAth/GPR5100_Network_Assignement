@@ -2,38 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-public class Inventory : MonoBehaviour
-{
+using System;
+public class Inventory : MonoBehaviour {
+    //event
+    public static event Action<int> onRemoveCall;
     [SerializeField]
     TextMeshProUGUI quantityText;
     private int hourglasses;
-    public int Hourglasess
-    {
-        get { return hourglasses;}
-        set { hourglasses = value;}
+    public int Hourglasess {
+        get { return hourglasses; }
+        set { hourglasses = value; }
     }
     // Start is called before the first frame update
-    private void OnEnable()
-    {
+    private void OnEnable() {
+        Trap.onTrapHitCall += RemoveHourglass;
         HourGlass.onHourglassPickupCall += AddHourglassCallBack;
     }
-    private void OnDisable()
-    {
+    private void OnDisable() {
+        Trap.onTrapHitCall -= RemoveHourglass;
         HourGlass.onHourglassPickupCall -= AddHourglassCallBack;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void AddHourglassCallBack()
-    {
+    public void AddHourglassCallBack() {
         Hourglasess++;
-        quantityText.text= "X " +Hourglasess;
+        quantityText.text = "X " + Hourglasess;
     }
-    public void RemoveHourglass()
-    {
-        // time logic // death logic
+    public void RemoveHourglass() {
+        onRemoveCall?.Invoke(hourglasses);
+        hourglasses = 0;
+        quantityText.text = "X " + Hourglasess;
     }
 }

@@ -30,6 +30,7 @@ public class Movement : NetworkBehaviour {
     private void Start() {
         ObjectInit();
     }
+    private void OnEnable() { startingPosition = transform.position; }
     private void Update() {
         if (isServer) {
             if (!objectInteractionInstance_.triggeredTrap && !objectInteractionInstance_.teleporting) {
@@ -42,7 +43,6 @@ public class Movement : NetworkBehaviour {
     }
     void ObjectInit() {
         objectInteractionInstance_ = ObjectInteractions.objectInteractionsInstance;
-        startingPosition = transform.position;
         playerController = GetComponent<CharacterController>();
         startingSpeed = moveSpeed;
         characterAnimator = GetComponent<Animator>();

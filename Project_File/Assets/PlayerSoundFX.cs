@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class PlayerSoundFX : MonoBehaviour
 {
     AudioSource audioSource;
@@ -13,14 +11,11 @@ public class PlayerSoundFX : MonoBehaviour
     [SerializeField] AudioClip[] footStepsWater;
     [SerializeField] AudioClip[] footStepsDirt;
     [SerializeField] AudioClip[] footStepsBush;
-
-
-
     private string tagName = "Normal";
     public string TagName
-        {
-         set => tagName=value;
-        }
+    {
+        set => tagName=value;
+    }
 
 
     private void OnEnable()
@@ -58,7 +53,7 @@ public class PlayerSoundFX : MonoBehaviour
     }
     public void FootSoundFx()
     {
-        audioSource.PlayOneShot(clips[tagName][UnityEngine.Random.Range(0, clips[tagName].Length)]);
+        audioSource.PlayOneShot(clips[tagName][Random.Range(0, clips[tagName].Length)]);
     }
     public void VolumeControll()
     {

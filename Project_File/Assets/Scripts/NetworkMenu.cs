@@ -15,17 +15,13 @@ public class NetworkMenu : NetworkBehaviour {
         if (isServer) {
             playersConnected = NetworkServer.connections.Count;
         }
-        Debug.Log(inputField.text);
     }
     public void StartHost()  {
-        //manager.StartHost();
         NetworkManager.singleton.StartHost();
     }
     public void StartClient() {
-
         manager.StartClient();
-        if (inputField.text!="")
-        {
+        if (inputField.text!="") {
             Debug.Log("ded");
             manager.networkAddress = inputField.text;
         }

@@ -9,4 +9,5 @@ public class GameManager : MonoBehaviour {
     #endregion
     public Movement player;
     public CameraFollow cameraFollow;
+    public Portal activePortal;
 }

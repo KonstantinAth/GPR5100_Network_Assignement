@@ -1,14 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-public class SoundManager : MonoBehaviour
-{
+public class SoundManager : MonoBehaviour {
     public static SoundManager instance = null;
-
     [SerializeField] [Range(0, 1)] float soundFxVolume;
     [SerializeField] [Range(0, 1)] float musicVolume;
-
     public float SoundFxVolume
     {
         get { return soundFxVolume; }
