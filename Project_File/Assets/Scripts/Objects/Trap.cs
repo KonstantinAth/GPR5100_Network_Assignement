@@ -1,6 +1,8 @@
 using UnityEngine;
 using Mirror;
+using System;
 public class Trap : MonoBehaviour {
+    public static event Action onTrapHitCall;
     ObjectInteractions objectInteractions;
     private void Start() {
         InitializeObjectInteractions();
@@ -9,16 +11,17 @@ public class Trap : MonoBehaviour {
         InitializeObjectInteractions();
     }
     void InitializeObjectInteractions() {
-        if(NetworkServer.active) {
+        if (NetworkServer.active) {
             objectInteractions = ObjectInteractions.objectInteractionsInstance;
         }
-        if(objectInteractions != null) {
+        if (objectInteractions != null) {
             return;
         }
     }
     private void OnTriggerEnter(Collider other) {
-        if(other.CompareTag("Player")) {
-            FindObjectOfType<ObjectInteractions>().triggeredTrap = true;    
+        if (other.CompareTag("Player")) {
+            onTrapHitCall?.Invoke();
+            FindObjectOfType<ObjectInteractions>().triggeredTrap = true;
         }
     }
     private void OnTriggerExit(Collider other) {

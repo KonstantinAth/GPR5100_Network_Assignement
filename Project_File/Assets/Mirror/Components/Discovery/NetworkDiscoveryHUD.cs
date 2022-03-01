@@ -25,7 +25,6 @@ namespace Mirror.Discovery
             }
         }
 #endif
-
         void OnGUI()
         {
             if (NetworkManager.singleton == null)

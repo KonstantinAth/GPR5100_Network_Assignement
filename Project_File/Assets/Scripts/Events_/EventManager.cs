@@ -2,6 +2,8 @@
 public class EventManager : MonoBehaviour {
     GameManager instance;
     [SerializeField] ObjectInteractions objectInteractions;
+    [SerializeField] Transform portals;
+    public int portalIndex = 0;
     private void Start() {
         instance = GameManager._instance;
         InitializeEvents();
@@ -16,6 +18,7 @@ public class EventManager : MonoBehaviour {
         instance.player.transform.position -= transform.forward;
         instance.cameraFollow.SetPositionToOtherPlayer();
         instance.player = objectInteractions.worldToGoNext.ThisWorldPlayer;
+        instance.activePortal = portals.GetChild(portalIndex).GetComponent<Portal>();
     }
     private void ObjectInteractions_OnEnteredQuicksand() {
         instance.player.moveSpeed = 3;

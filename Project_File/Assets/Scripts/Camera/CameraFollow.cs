@@ -16,17 +16,17 @@ public class CameraFollow : NetworkBehaviour {
     [SerializeField] LayerMask layersToBeCulledIfClient;
     [SerializeField] GameObject startingCamera;
     // Start is called before the first frame update
-    void Start() { 
-        initialization += ReferenceInitialization;
-        initialization += ObjectInitialization;
-        followPlayer += FollowPlayer;
-        initialization();
-        DetermineCullingMaskProperties();
-    }
+    void Start() { ObjectInit(); }
     // Update is called once per frame
-    void Update() { 
-        followPlayer();
+    void Update() {
+        FollowPlayer();
         TurnEntryCameraOff();
+    }
+    void ObjectInit() {
+        ReferenceInitialization();
+        ObjectInitialization();
+        FollowPlayer();
+        DetermineCullingMaskProperties();
     }
     void TurnEntryCameraOff() {
         if (NetworkServer.active) {
@@ -44,9 +44,7 @@ public class CameraFollow : NetworkBehaviour {
         return false;
     }
     void ReferenceInitialization() { gameManagerInstance_ = GameManager._instance; }
-    void ObjectInitialization() {
-        transform.position = new Vector3(transform.position.x, yOffset, transform.position.z);
-    }
+    void ObjectInitialization() { transform.position = new Vector3(transform.position.x, yOffset, transform.position.z); }
     public void SetPositionToOtherPlayer() {
         transform.position = new Vector3(gameManagerInstance_.player.transform.localPosition.x + xOffset, transform.localPosition.y, gameManagerInstance_.player.transform.localPosition.z + zOffset);
     }

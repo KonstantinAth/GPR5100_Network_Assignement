@@ -48,7 +48,6 @@ namespace Mirror
             StopButtons();
             GUILayout.EndArea();
         }
-
         void StartButtons()
         {
             if (!NetworkClient.active)

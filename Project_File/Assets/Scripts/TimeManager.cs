@@ -6,7 +6,7 @@ public class TimeManager : NetworkBehaviour {
     [SerializeField] private float mapTimeInMinutes;
     [SerializeField] TextMeshProUGUI timeText;
     [SerializeField] GameObject GameHUDCanvas;
-    [SyncVar (hook = nameof(InitializeTimeCanvas))] public float timeRemaining;
+    [SyncVar(hook = nameof(InitializeTimeCanvas))] public float timeRemaining;
     bool clientAndServerActive => NetworkServer.connections.Count >= 2;
     float seconds;
     float minutes;
@@ -17,6 +17,12 @@ public class TimeManager : NetworkBehaviour {
         GameHUDCanvas.SetActive(true);
         isInitialized = true;
         if (isServer) SetTime();
+    }
+    private void OnEnable() {
+        Inventory.onRemoveCall += AddExtraTime;
+    }
+    private void OnDisable() {
+        Inventory.onRemoveCall -= AddExtraTime;
     }
     private void Start() {
         ObjectInit();
@@ -40,5 +46,9 @@ public class TimeManager : NetworkBehaviour {
         seconds = Mathf.Floor(timeRemaining % 60);
         minutes = Mathf.Floor(timeRemaining / 60);
         timeText.text = $"Time Remaining : {minutes}:{seconds}";
+    }
+
+    void AddExtraTime(int hourglasses) {
+        timeRemaining += timeRemaining * hourglasses / 100 * 10;
     }
 }
