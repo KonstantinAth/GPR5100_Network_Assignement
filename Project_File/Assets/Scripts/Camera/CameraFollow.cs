@@ -16,7 +16,13 @@ public class CameraFollow : NetworkBehaviour {
     [SerializeField] LayerMask layersToBeCulledIfClient;
     [SerializeField] GameObject startingCamera;
     // Start is called before the first frame update
+<<<<<<< HEAD
     void Start() { ObjectInit(); }
+=======
+    void Start() {
+        ObjectInit(); 
+    }
+>>>>>>> 2c727b561ea8e5b75a1a52dcfc31b1fecf5514d2
     // Update is called once per frame
     void Update() {
         FollowPlayer();
