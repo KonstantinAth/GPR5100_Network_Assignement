@@ -19,11 +19,11 @@ public class NetworkMenu : NetworkBehaviour {
         if (inputField.text != "" && isAddressValid(inputField.text, inputField)) {
             Debug.Log("ded");
             manager.networkAddress = inputField.text;
-            Debug.Log(manager.networkAddress);
             manager.StartClient();
         }
-        Debug.Log(manager.networkAddress);
-        manager.StartClient();
+        else {
+            manager.StartClient();
+        }
     }
     private void ConnectStatus() {
         if (NetworkClient.isConnected && NetworkServer.active) { MenuCanvas.SetActive(false); }
@@ -48,7 +48,6 @@ public class NetworkMenu : NetworkBehaviour {
         else
             inputField.text = "You need 4 parts for the address";
         if (correctCounter == 4) {
-            inputField.text = "CONNECTING...";
             return true;
         }
         else { return false; }
