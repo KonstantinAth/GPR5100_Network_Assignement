@@ -11,6 +11,7 @@ TagManager:
   - Dirt
   - Bush
   - Asteroid
+  - Default
   layers:
   - Default
   - TransparentFX

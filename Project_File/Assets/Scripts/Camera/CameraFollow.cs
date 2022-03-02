@@ -4,16 +4,12 @@ using UnityEngine;
 using Mirror;
 public class CameraFollow : NetworkBehaviour {
     GameManager gameManagerInstance_;
-    delegate void Initialization();
-    Initialization initialization;
-    delegate void CameraFollowPlayer();
-    CameraFollowPlayer followPlayer;
     [SerializeField] float yOffset;
     [SerializeField] float xOffset;
     [SerializeField] float zOffset;
     [SerializeField] float lerpTime;
-    [SerializeField] LayerMask layersToBeCulledIfHost;
-    [SerializeField] LayerMask layersToBeCulledIfClient;
+    public LayerMask layersToBeCulledIfHost;
+    public LayerMask layersToBeCulledIfClient;
     [SerializeField] GameObject startingCamera;
     // Start is called before the first frame update
     void Start() { ObjectInit(); }

@@ -3,7 +3,9 @@ using Mirror;
 using System;
 public class Trap : MonoBehaviour {
     public static event Action onTrapHitCall;
+    public static event Action OnTrapDeath; 
     ObjectInteractions objectInteractions;
+    GameManager instance;
     private void Start() {
         InitializeObjectInteractions();
     }
@@ -17,11 +19,13 @@ public class Trap : MonoBehaviour {
         if (objectInteractions != null) {
             return;
         }
+        instance = GameManager._instance;
     }
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
+            instance.DeathCount++;
             onTrapHitCall?.Invoke();
-            FindObjectOfType<ObjectInteractions>().triggeredTrap = true;
+            OnTrapDeath?.Invoke();
         }
     }
     private void OnTriggerExit(Collider other) {

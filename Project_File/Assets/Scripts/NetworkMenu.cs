@@ -10,9 +10,19 @@ public class NetworkMenu : NetworkBehaviour {
     GameObject MenuCanvas;
     [SerializeField]
     NetworkManager manager;
+    GameManager instance;
+    private void Start() { 
+        if(FindObjectsOfType<NetworkManager>().Length > 1) { Destroy(FindObjectsOfType<NetworkManager>()[1]); }
+        instance = GameManager._instance;
+    }
     private void Update() {
         ConnectStatus();
         if (isServer) { playersConnected = NetworkServer.connections.Count; }
+        if (instance.GameFinished) {
+            instance.entryCamera.SetActive(true);
+            if(instance.player.isThisServer) { manager.StopHost(); }
+            else { manager.StopClient(); }
+        }
     }
     public void StartHost() { manager.StartHost(); }
     public void StartClient() {

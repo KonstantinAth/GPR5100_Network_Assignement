@@ -27,11 +27,14 @@ public class Movement : NetworkBehaviour {
     CharacterController playerController;
     ObjectInteractions objectInteractionInstance_;
     public float startingSpeed;
+    GameManager instance;
+    public bool isThisServer;
     private void Start() {
         ObjectInit();
     }
     private void OnEnable() { startingPosition = transform.position; }
     private void Update() {
+        if (instance.GameFinished) return;
         if (isServer) {
             if (!objectInteractionInstance_.triggeredTrap && !objectInteractionInstance_.teleporting) {
                 Move();
@@ -42,11 +45,13 @@ public class Movement : NetworkBehaviour {
         GroundtypeCheck();
     }
     void ObjectInit() {
+        isThisServer = isServer ? true : false;
         objectInteractionInstance_ = ObjectInteractions.objectInteractionsInstance;
         playerController = GetComponent<CharacterController>();
         startingSpeed = moveSpeed;
         characterAnimator = GetComponent<Animator>();
         soundFx = GetComponent<PlayerSoundFX>();
+        instance = GameManager._instance;
         #region Might need
         //if(isClient) {
         //    for (int i = 0; i < rend.Length; i++) {

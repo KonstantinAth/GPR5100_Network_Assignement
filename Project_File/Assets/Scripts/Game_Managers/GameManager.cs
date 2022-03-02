@@ -9,5 +9,10 @@ public class GameManager : MonoBehaviour {
     #endregion
     public Movement player;
     public CameraFollow cameraFollow;
-    public Portal activePortal;
+    public Portal ActivePortal;
+    public UIManager UIManager;
+    public bool GameFinished;
+    public TimeManager timeManager;
+    public int DeathCount;
+    public GameObject entryCamera;
 }

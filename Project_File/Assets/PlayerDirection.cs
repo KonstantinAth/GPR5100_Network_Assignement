@@ -14,9 +14,11 @@ public class PlayerDirection : MonoBehaviour {
         else uiManagerInstance.closerToDirectionIndicator.color = uiManagerInstance.startingColor;
     }
     bool FacingTarget () {
-        float dotProduct = Vector3.Dot(gameManagerInstance.player.transform.forward,
-            (gameManagerInstance.activePortal.transform.position - gameManagerInstance.player.transform.position).normalized);
-        if (dotProduct > directionMultiplier) { return true; }
+        if (gameManagerInstance.player.gameObject.activeInHierarchy) {
+            float dotProduct = Vector3.Dot(gameManagerInstance.player.transform.forward, (gameManagerInstance.ActivePortal.transform.position - gameManagerInstance.player.transform.position).normalized);
+            if (dotProduct > directionMultiplier) { return true; }
+            return false;
+        }
         return false;
     }
 }
