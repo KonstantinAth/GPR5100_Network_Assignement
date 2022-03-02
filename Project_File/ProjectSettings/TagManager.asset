@@ -10,10 +10,7 @@ TagManager:
   - Road
   - Dirt
   - Bush
-<<<<<<< HEAD
   - Asteroid
-=======
->>>>>>> 2c727b561ea8e5b75a1a52dcfc31b1fecf5514d2
   layers:
   - Default
   - TransparentFX
