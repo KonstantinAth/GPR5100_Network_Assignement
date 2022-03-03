@@ -13,17 +13,20 @@ public class Trap : MonoBehaviour {
         InitializeObjectInteractions();
     }
     void InitializeObjectInteractions() {
-        if (NetworkServer.active) {
+        if (NetworkServer.active ) {
             objectInteractions = ObjectInteractions.objectInteractionsInstance;
+            instance = GameManager._instance;
         }
-        if (objectInteractions != null) {
-            return;
-        }
-        instance = GameManager._instance;
+        //if (objectInteractions != null && instance!=null) {
+        //    return;
+        //}
     }
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            instance.DeathCount++;
+            if (instance!=null)
+            {
+                instance.DeathCount++;
+            }
             onTrapHitCall?.Invoke();
             OnTrapDeath?.Invoke();
         }

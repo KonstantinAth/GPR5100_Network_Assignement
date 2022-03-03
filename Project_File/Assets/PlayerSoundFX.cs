@@ -11,7 +11,7 @@ public class PlayerSoundFX : MonoBehaviour
     [SerializeField] AudioClip[] footStepsWater;
     [SerializeField] AudioClip[] footStepsDirt;
     [SerializeField] AudioClip[] footStepsBush;
-    private string tagName = "Normal";
+    private string tagName = "Sand";
     public string TagName
     {
         set => tagName=value;
