@@ -1,7 +1,6 @@
 using UnityEngine;
 using Mirror;
 [RequireComponent(typeof(CharacterController))]
-//[RequireComponent(typeof(NetworkTransform))]
 public class Movement : NetworkBehaviour {
     PlayerSoundFX soundFx;
     public Vector3 startingPosition;

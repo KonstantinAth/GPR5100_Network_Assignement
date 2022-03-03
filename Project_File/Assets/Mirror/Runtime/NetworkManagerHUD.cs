@@ -32,12 +32,9 @@ namespace Mirror
             {
                 StatusLabels();
             }
-
             // client ready
-            if (NetworkClient.isConnected && !NetworkClient.ready)
-            {
-                if (GUILayout.Button("Client Ready"))
-                {
+            if (NetworkClient.isConnected && !NetworkClient.ready) {
+                if (GUILayout.Button("Client Ready")) {
                     NetworkClient.Ready();
                     if (NetworkClient.localPlayer == null)
                     {

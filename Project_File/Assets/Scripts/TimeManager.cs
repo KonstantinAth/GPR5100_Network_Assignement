@@ -51,6 +51,10 @@ public class TimeManager : NetworkBehaviour {
         timeText.text = $"Time Remaining : {minutes}:{seconds}";
         if(timeRemaining <= 0) {
             timeRemaining = 0;
+            instance.player.GetComponent<Movement>().enabled = false;
+            instance.player.GetComponent<CharacterController>().enabled = false;
+            instance.UIManager.SetLoseCanvasState(true);
+            instance.SetCursorState(cursorState: false);
         }
     }
     void AddExtraTime(int hourglasses) {

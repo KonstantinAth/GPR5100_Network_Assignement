@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 public class GameManager : MonoBehaviour {
     #region Singleton
 
@@ -16,4 +13,9 @@ public class GameManager : MonoBehaviour {
     public TimeManager timeManager;
     public int DeathCount;
     public GameObject entryCamera;
+    public void SetCursorState(bool cursorState) {
+        Cursor.visible = cursorState;
+        if(Cursor.visible) { Cursor.lockState = CursorLockMode.None; }
+        else { Cursor.lockState = CursorLockMode.Locked; }
+    }
 }

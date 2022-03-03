@@ -3,14 +3,17 @@ using System.Collections;
 public class Portal : MonoBehaviour {
     GameManager manager;
     [SerializeField] World worldToGoNext;
-    bool isFinalDoor;
+    public bool isFinalDoor;
     private void Start() { 
         manager = GameManager._instance;
         isFinalDoor = this.transform == transform.parent.GetChild(transform.parent.childCount - 1);
     }
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            if (isFinalDoor) { DetermineWinningPortal(); }
+            if (isFinalDoor) {
+                Debug.Log("TRIGGERED");
+                manager.GameFinished = true;
+            }
             else { StartCoroutine(TriggerAndExit()); }
         }
     }
@@ -24,10 +27,5 @@ public class Portal : MonoBehaviour {
         yield return new WaitForEndOfFrame();
         worldToGoNext.previousPlayer.gameObject.SetActive(false);
         FindObjectOfType<ObjectInteractions>().teleporting = false;
-    }
-    void DetermineWinningPortal() {
-        manager.GameFinished = true;
-        manager.UIManager.UpdateTimeAndDeathCount();
-        manager.UIManager.WinningCanvas.SetActive(true); 
     }
 }
