@@ -63,8 +63,9 @@ public class UIManager : MonoBehaviour {
     void FinishGame() {
         if(instance.GameFinished) {
             instance.entryCamera.SetActive(true);
-            instance.player.GetComponent<CharacterController>().enabled = false;
-            instance.player.GetComponent<Movement>().enabled = false;
+            //instance.player.GetComponent<CharacterController>().enabled = false;
+            //instance.player.GetComponent<Movement>().enabled = false;
+            instance.player.gameObject.SetActive(false);
             UpdateTimeAndDeathCount();
             WinningCanvas.SetActive(true);
         }

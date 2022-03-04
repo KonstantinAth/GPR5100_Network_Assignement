@@ -10,10 +10,7 @@ public class Portal : MonoBehaviour {
     }
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            if (isFinalDoor) {
-                Debug.Log("TRIGGERED");
-                manager.GameFinished = true;
-            }
+            if (isFinalDoor) { manager.GameFinished = true; }
             else { StartCoroutine(TriggerAndExit()); }
         }
     }
