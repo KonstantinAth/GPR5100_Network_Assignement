@@ -5,4 +5,6 @@ public class World : MonoBehaviour {
     public Transform GoToPoint;
     public Movement ThisWorldPlayer;
     public Movement previousPlayer;
+    public GameObject thisWorldCamera;
+    public GameObject previousWorldCamera;
 }

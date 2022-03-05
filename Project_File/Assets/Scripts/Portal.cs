@@ -15,13 +15,17 @@ public class Portal : MonoBehaviour {
         }
     }
     IEnumerator TriggerAndExit() {
-        manager.player.GetComponent<CharacterController>().enabled = false;
-        manager.player.GetComponent<Animator>().enabled = false;
         FindObjectOfType<ObjectInteractions>().teleporting = true;
         FindObjectOfType<ObjectInteractions>().worldToGoNext = worldToGoNext;
+        manager.player.GetComponent<CharacterController>().enabled = false;
+        manager.player.GetComponent<Animator>().enabled = false;
+        manager.player.GetComponent<AudioSource>();
         worldToGoNext.ThisWorldPlayer.enabled = true;
+        worldToGoNext.thisWorldCamera.GetComponent<Camera>().enabled = true;
         FindObjectOfType<EventManager>().portalIndex++;
         yield return new WaitForEndOfFrame();
+        worldToGoNext.previousWorldCamera.GetComponent<Camera>().enabled = false;
+        worldToGoNext.previousWorldCamera.SetActive(false);
         worldToGoNext.previousPlayer.gameObject.SetActive(false);
         FindObjectOfType<ObjectInteractions>().teleporting = false;
     }

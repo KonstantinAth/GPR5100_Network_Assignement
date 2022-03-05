@@ -129,9 +129,7 @@ public class Movement : NetworkBehaviour {
             velocity.y += gravity * objectMass * Mathf.Pow(Time.deltaTime, 2);
             playerController.Move(velocity);
         }
-        else {
-            velocity.y = -0.2f;
-        }
+        else { velocity.y = -0.2f; }
     }
     #endregion
     private void OnDrawGizmos() {

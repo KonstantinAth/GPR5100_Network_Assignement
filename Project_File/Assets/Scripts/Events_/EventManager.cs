@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 public class EventManager : MonoBehaviour {
     GameManager instance;
     [SerializeField] ObjectInteractions objectInteractions;
@@ -18,7 +19,6 @@ public class EventManager : MonoBehaviour {
 
     private void Trap_OnTrapDeath() { StartCoroutine(SeeDeathAndReset(3.0f)); }
     private void ObjectInteractions_OnEnteredPortal() {
-        instance.cameraFollow.SetPositionToOtherPlayer();
         instance.player = objectInteractions.worldToGoNext.ThisWorldPlayer;
         instance.ActivePortal = portals.GetChild(portalIndex).GetComponent<Portal>();
     }
@@ -29,14 +29,18 @@ public class EventManager : MonoBehaviour {
         instance.player.moveSpeed = instance.player.startingSpeed;
     }
     IEnumerator SeeDeathAndReset(float time) {
-        Camera.main.cullingMask = instance.cameraFollow.layersToBeCulledIfClient;
+        Camera[] cameras = FindObjectsOfType<Camera>();
+        Camera activeCamera = null;
+        foreach (var item in cameras) { if(item.GetComponent<Camera>().enabled == true && item.gameObject.activeInHierarchy) { activeCamera = item; } }
+        activeCamera.cullingMask = instance.cameraFollow.layersToBeCulledIfClient; 
         instance.player.GetComponent<CharacterController>().enabled = false;
         instance.player.GetComponent<Movement>().enabled = false; 
         instance.player.GetComponent<Animator>().enabled = false;
         yield return new WaitForSeconds(time);
         instance.player.transform.position = instance.player.startingPosition;
-        if (instance.player.isThisServer) Camera.main.cullingMask = instance.cameraFollow.layersToBeCulledIfHost;
+        if (instance.player.isThisServer) activeCamera.cullingMask = instance.cameraFollow.layersToBeCulledIfHost;
         yield return new WaitForEndOfFrame();
+        FindObjectOfType<ObjectInteractions>().triggeredTrap = false;
         instance.player.GetComponent<CharacterController>().enabled = true;
         instance.player.GetComponent<Movement>().enabled = true;
         instance.player.GetComponent<Animator>().enabled = true;

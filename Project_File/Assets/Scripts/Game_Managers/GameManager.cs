@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour {
     public static GameManager _instance;
     private void Awake() { _instance = this; }
     #endregion
+    public ObjectInteractions objectInteractions;
     public Movement player;
     public CameraFollow cameraFollow;
     public Portal ActivePortal;
