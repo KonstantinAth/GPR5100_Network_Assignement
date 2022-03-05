@@ -3,7 +3,7 @@ using System.Collections;
 public class Portal : MonoBehaviour {
     GameManager manager;
     [SerializeField] World worldToGoNext;
-    public bool isFinalDoor;
+    [SerializeField] bool isFinalDoor;
     private void Start() { 
         manager = GameManager._instance;
         isFinalDoor = this.transform == transform.parent.GetChild(transform.parent.childCount - 1);
