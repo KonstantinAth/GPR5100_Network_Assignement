@@ -20,7 +20,7 @@ public class EventManager : MonoBehaviour {
     private void Trap_OnTrapDeath() { StartCoroutine(SeeDeathAndReset(3.0f)); }
     private void ObjectInteractions_OnEnteredPortal() {
         instance.player = objectInteractions.worldToGoNext.ThisWorldPlayer;
-        instance.ActivePortal = portals.GetChild(portalIndex).GetComponent<Portal>();
+        instance.ActivePlayer = portals.GetChild(portalIndex).gameObject;
     }
     private void ObjectInteractions_OnEnteredQuicksand() {
         instance.player.moveSpeed = 3;

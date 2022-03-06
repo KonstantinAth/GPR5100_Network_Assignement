@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
     public ObjectInteractions objectInteractions;
     public Movement player;
     public CameraFollow cameraFollow;
-    public Portal ActivePortal;
+    public GameObject ActivePlayer;
     public UIManager UIManager;
     public bool GameFinished;
     public TimeManager timeManager;

@@ -12,6 +12,7 @@ TagManager:
   - Bush
   - Asteroid
   - Default
+  - Portal
   layers:
   - Default
   - TransparentFX
