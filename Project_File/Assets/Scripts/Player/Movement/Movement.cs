@@ -39,7 +39,7 @@ public class Movement : NetworkBehaviour {
     }
     private void OnDisable() { }
     private void Update() {
-        if (instance.GameFinished) return;
+        if (instance.GameFinished || instance.timeManager.GamePaused) return;
         if(instance.timeManager.triggeredPortal) {
             if (isFinalPlayer) { instance.GameFinished = true; }
             else { OnEnteredPortal?.Invoke(worldToGoNext); }

@@ -10,6 +10,8 @@ public class TimeManager : NetworkBehaviour {
     [SyncVar(hook = nameof(InitializeTimeCanvas))] public float timeRemaining;
     [SyncVar] public int DeathCount;
     [SyncVar] public bool triggeredPortal;
+    //TODO:
+    public bool GamePaused;
     bool clientAndServerActive => NetworkServer.connections.Count >= 2;
     float seconds;
     float minutes;
@@ -22,12 +24,8 @@ public class TimeManager : NetworkBehaviour {
         instance = GameManager._instance;
         if (isServer) SetTime();
     }
-    private void OnEnable() {
-        Inventory.onRemoveCall += AddExtraTime;
-    }
-    private void OnDisable() {
-        Inventory.onRemoveCall -= AddExtraTime;
-    }
+    private void OnEnable() { Inventory.onRemoveCall += AddExtraTime; }
+    private void OnDisable() { Inventory.onRemoveCall -= AddExtraTime; }
     private void Start() {
         ObjectInit();
         DisplayTime();
@@ -35,11 +33,11 @@ public class TimeManager : NetworkBehaviour {
     private void Update() {
         if (instance.GameFinished) return;
         if (isServer) SetTime();
+        //TODO:
+        GamePaused = Input.GetKeyDown(KeyCode.Escape) && !GamePaused ? true : false; 
         DisplayTime();
     }
-    void ObjectInit() {
-        timeRemaining = mapTimeInMinutes * 60;
-    }
+    void ObjectInit() { timeRemaining = mapTimeInMinutes * 60; }
     void SetTime() {
         if (clientAndServerActive) {
             timeRemaining -= Time.deltaTime;
@@ -59,7 +57,5 @@ public class TimeManager : NetworkBehaviour {
             instance.SetCursorState(cursosVisible: true);
         }
     }
-    void AddExtraTime(int hourglasses) {
-        timeRemaining += timeRemaining * hourglasses / 100 * 10;
-    }
+    void AddExtraTime(int hourglasses) { timeRemaining += timeRemaining * hourglasses / 100 * 10; }
 }
