@@ -4,6 +4,9 @@ using System.Collections;
 using System;
 [RequireComponent(typeof(CharacterController))]
 public class Movement : NetworkBehaviour {
+    public World worldToGoNext;
+    [SerializeField] bool isFinalPlayer;
+    public static event Action<World> OnEnteredPortal;
     PlayerSoundFX soundFx;
     public Vector3 startingPosition;
     private RaycastHit hit;
@@ -32,29 +35,15 @@ public class Movement : NetworkBehaviour {
     public bool isThisServer;
     private void Start() { ObjectInit(); }
     private void OnEnable() {
-        Portal.OnEnteredPortal += OnEnteredPortal;
         startingPosition = transform.position;
     }
-    private void OnDisable() { Portal.OnEnteredPortal -= OnEnteredPortal; }
-    private void OnEnteredPortal(World worldToGoNext) { StartCoroutine(TriggerAndExit(worldToGoNext)); }
-    IEnumerator TriggerAndExit(World worldToGoNext) {
-        GetComponent<CharacterController>().enabled = false;
-        GetComponent<Animator>().enabled = false;
-        FindObjectOfType<ObjectInteractions>().teleporting = true;
-        FindObjectOfType<ObjectInteractions>().worldToGoNext = worldToGoNext;
-        GetComponent<AudioSource>();
-        worldToGoNext.ThisWorldPlayer.enabled = true;
-        worldToGoNext.thisWorldCamera.GetComponent<Camera>().enabled = true;
-        FindObjectOfType<EventManager>().portalIndex++;
-        yield return new WaitForEndOfFrame();
-        worldToGoNext.previousWorldCamera.GetComponent<Camera>().enabled = false;
-        worldToGoNext.previousWorldCamera.SetActive(false);
-        worldToGoNext.previousPlayer.gameObject.SetActive(false);
-        FindObjectOfType<ObjectInteractions>().teleporting = false;
-    }
-
+    private void OnDisable() { }
     private void Update() {
         if (instance.GameFinished) return;
+        if(instance.timeManager.triggeredPortal) {
+            if (isFinalPlayer) { instance.GameFinished = true; }
+            else { OnEnteredPortal?.Invoke(worldToGoNext); }
+        }
         if (isServer) {
             if (!objectInteractionInstance_.triggeredTrap && !objectInteractionInstance_.teleporting) {
                 Move();
@@ -66,6 +55,7 @@ public class Movement : NetworkBehaviour {
     }
     void ObjectInit() {
         isThisServer = isServer ? true : false;
+        isFinalPlayer = gameObject.name.Equals("Ghost") ? true : false;
         playerController = GetComponent<CharacterController>();
         startingSpeed = moveSpeed;
         characterAnimator = GetComponent<Animator>();

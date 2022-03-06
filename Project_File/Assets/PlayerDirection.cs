@@ -16,7 +16,7 @@ public class PlayerDirection : MonoBehaviour {
     bool FacingTarget () {
         if (gameManagerInstance.player.gameObject.activeInHierarchy) {
             float dotProduct = Vector3.Dot(gameManagerInstance.player.transform.forward,
-                (gameManagerInstance.ActivePlayer.transform.position - gameManagerInstance.player.transform.position).normalized);
+                (gameManagerInstance.ActivePortal.transform.position - gameManagerInstance.player.transform.position).normalized);
             if (dotProduct > directionMultiplier) { return true; }
             return false;
         }

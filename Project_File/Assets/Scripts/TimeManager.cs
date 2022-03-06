@@ -9,6 +9,7 @@ public class TimeManager : NetworkBehaviour {
     GameManager instance;
     [SyncVar(hook = nameof(InitializeTimeCanvas))] public float timeRemaining;
     [SyncVar] public int DeathCount;
+    [SyncVar] public bool triggeredPortal;
     bool clientAndServerActive => NetworkServer.connections.Count >= 2;
     float seconds;
     float minutes;
