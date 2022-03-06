@@ -12,10 +12,9 @@ public class GameManager : MonoBehaviour {
     public UIManager UIManager;
     public bool GameFinished;
     public TimeManager timeManager;
-    public int DeathCount;
     public GameObject entryCamera;
-    public void SetCursorState(bool cursorState) {
-        Cursor.visible = cursorState;
+    public void SetCursorState(bool cursosVisible) {
+        Cursor.visible = cursosVisible;
         if(Cursor.visible) { Cursor.lockState = CursorLockMode.None; }
         else { Cursor.lockState = CursorLockMode.Locked; }
     }

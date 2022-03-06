@@ -2,13 +2,6 @@ using UnityEngine;
 using System;
 using System.Collections;
 public class ObjectInteractions : MonoBehaviour {
-    #region Singleton
-    public static ObjectInteractions objectInteractionsInstance;
-    private void Awake() {
-        if (objectInteractionsInstance == null)
-            objectInteractionsInstance = this;
-    }
-    #endregion
     public static event Action OnEnteredQuicksand;
     public static event Action OnExitedQuicksand;
     public static event Action OnEnteredPortal;

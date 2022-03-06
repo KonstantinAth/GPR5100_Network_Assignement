@@ -6,7 +6,6 @@ public class Quicksand : MonoBehaviour {
         InitializeObjectInteractions();
     }
     void InitializeObjectInteractions() {
-        if (NetworkServer.active) { objectInteractions = ObjectInteractions.objectInteractionsInstance; }
         if (objectInteractions != null) {
             return;
         }

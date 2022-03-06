@@ -1,5 +1,7 @@
 using UnityEngine;
 using Mirror;
+using System.Collections;
+using System;
 [RequireComponent(typeof(CharacterController))]
 public class Movement : NetworkBehaviour {
     PlayerSoundFX soundFx;
@@ -28,10 +30,29 @@ public class Movement : NetworkBehaviour {
     public float startingSpeed;
     GameManager instance;
     public bool isThisServer;
-    private void Start() {
-        ObjectInit();
+    private void Start() { ObjectInit(); }
+    private void OnEnable() {
+        Portal.OnEnteredPortal += OnEnteredPortal;
+        startingPosition = transform.position;
     }
-    private void OnEnable() { startingPosition = transform.position; }
+    private void OnDisable() { Portal.OnEnteredPortal -= OnEnteredPortal; }
+    private void OnEnteredPortal(World worldToGoNext) { StartCoroutine(TriggerAndExit(worldToGoNext)); }
+    IEnumerator TriggerAndExit(World worldToGoNext) {
+        GetComponent<CharacterController>().enabled = false;
+        GetComponent<Animator>().enabled = false;
+        FindObjectOfType<ObjectInteractions>().teleporting = true;
+        FindObjectOfType<ObjectInteractions>().worldToGoNext = worldToGoNext;
+        GetComponent<AudioSource>();
+        worldToGoNext.ThisWorldPlayer.enabled = true;
+        worldToGoNext.thisWorldCamera.GetComponent<Camera>().enabled = true;
+        FindObjectOfType<EventManager>().portalIndex++;
+        yield return new WaitForEndOfFrame();
+        worldToGoNext.previousWorldCamera.GetComponent<Camera>().enabled = false;
+        worldToGoNext.previousWorldCamera.SetActive(false);
+        worldToGoNext.previousPlayer.gameObject.SetActive(false);
+        FindObjectOfType<ObjectInteractions>().teleporting = false;
+    }
+
     private void Update() {
         if (instance.GameFinished) return;
         if (isServer) {
@@ -45,19 +66,12 @@ public class Movement : NetworkBehaviour {
     }
     void ObjectInit() {
         isThisServer = isServer ? true : false;
-        objectInteractionInstance_ = ObjectInteractions.objectInteractionsInstance;
         playerController = GetComponent<CharacterController>();
         startingSpeed = moveSpeed;
         characterAnimator = GetComponent<Animator>();
         soundFx = GetComponent<PlayerSoundFX>();
         instance = GameManager._instance;
-        #region Might need
-        //if(isClient) {
-        //    for (int i = 0; i < rend.Length; i++) {
-        //        rend[i].enabled = false;
-        //    }
-        //}
-        #endregion
+        objectInteractionInstance_ = instance.objectInteractions;
     }
     public void GroundtypeCheck()
     {

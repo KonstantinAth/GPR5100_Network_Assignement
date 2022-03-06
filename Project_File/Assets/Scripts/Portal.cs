@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections;
+using System;
 public class Portal : MonoBehaviour {
     GameManager manager;
     [SerializeField] World worldToGoNext;
     [SerializeField] bool isFinalDoor;
+    public static event Action<World> OnEnteredPortal; 
     private void Start() { 
         manager = GameManager._instance;
         isFinalDoor = this.transform == transform.parent.GetChild(transform.parent.childCount - 1);
@@ -11,22 +13,7 @@ public class Portal : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
             if (isFinalDoor) { manager.GameFinished = true; }
-            else { StartCoroutine(TriggerAndExit()); }
+            else { OnEnteredPortal?.Invoke(worldToGoNext); }
         }
-    }
-    IEnumerator TriggerAndExit() {
-        FindObjectOfType<ObjectInteractions>().teleporting = true;
-        FindObjectOfType<ObjectInteractions>().worldToGoNext = worldToGoNext;
-        manager.player.GetComponent<CharacterController>().enabled = false;
-        manager.player.GetComponent<Animator>().enabled = false;
-        manager.player.GetComponent<AudioSource>();
-        worldToGoNext.ThisWorldPlayer.enabled = true;
-        worldToGoNext.thisWorldCamera.GetComponent<Camera>().enabled = true;
-        FindObjectOfType<EventManager>().portalIndex++;
-        yield return new WaitForEndOfFrame();
-        worldToGoNext.previousWorldCamera.GetComponent<Camera>().enabled = false;
-        worldToGoNext.previousWorldCamera.SetActive(false);
-        worldToGoNext.previousPlayer.gameObject.SetActive(false);
-        FindObjectOfType<ObjectInteractions>().teleporting = false;
     }
 }

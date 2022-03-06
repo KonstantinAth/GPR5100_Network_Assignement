@@ -4,7 +4,6 @@ using System;
 public class Trap : MonoBehaviour {
     public static event Action onTrapHitCall;
     public static event Action OnTrapDeath; 
-    ObjectInteractions objectInteractions;
     GameManager instance;
     private void Start() {
         InitializeObjectInteractions();
@@ -14,7 +13,6 @@ public class Trap : MonoBehaviour {
     }
     void InitializeObjectInteractions() {
         if (NetworkServer.active ) {
-            objectInteractions = ObjectInteractions.objectInteractionsInstance;
             instance = GameManager._instance;
         }
     }
@@ -22,7 +20,7 @@ public class Trap : MonoBehaviour {
         if (other.CompareTag("Player")) {
             FindObjectOfType<ObjectInteractions>().triggeredTrap = true;
             Debug.Log("HITTED TRAP");
-            if (instance!=null){ instance.DeathCount++; }
+            if (instance!=null){ instance.timeManager.DeathCount++; }
             onTrapHitCall?.Invoke();
             OnTrapDeath?.Invoke();
         }

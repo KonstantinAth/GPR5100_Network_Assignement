@@ -39,13 +39,13 @@ public class UIManager : MonoBehaviour {
         }
     }
     void Pause() {
-        instance.SetCursorState(cursorState: true);
+        instance.SetCursorState(cursosVisible: true);
         isPaused = true;
         Time.timeScale = 0;
         pauseMenu.SetActive(true);
     }
     void Resume() {
-        instance.SetCursorState(cursorState: false);
+        instance.SetCursorState(cursosVisible: false);
         isPaused = false;
         Time.timeScale = 1;
         pauseMenu.SetActive(false);
@@ -57,15 +57,16 @@ public class UIManager : MonoBehaviour {
     public void UpdateTimeAndDeathCount(){
         float seconds = Mathf.Floor(instance.timeManager.timeRemaining % 60);
         float minutes = Mathf.Floor(instance.timeManager.timeRemaining / 60);
-        deathCountText.text = $"Death Count : {instance.DeathCount}";
+        deathCountText.text = $"Death Count : {instance.timeManager.DeathCount}";
         remainingTimeText.text = $"Time Remained : {minutes}:{seconds}";
     }
     void FinishGame() {
         if(instance.GameFinished) {
             instance.entryCamera.SetActive(true);
-            //instance.player.GetComponent<CharacterController>().enabled = false;
-            //instance.player.GetComponent<Movement>().enabled = false;
-            instance.player.gameObject.SetActive(false);
+            instance.player.GetComponent<CharacterController>().enabled = false;
+            instance.player.GetComponent<Movement>().enabled = false;
+            instance.player.GetComponent<AudioSource>().enabled = false;
+            instance.SetCursorState(true);
             UpdateTimeAndDeathCount();
             WinningCanvas.SetActive(true);
         }

@@ -8,6 +8,7 @@ public class TimeManager : NetworkBehaviour {
     [SerializeField] GameObject GameHUDCanvas;
     GameManager instance;
     [SyncVar(hook = nameof(InitializeTimeCanvas))] public float timeRemaining;
+    [SyncVar] public int DeathCount;
     bool clientAndServerActive => NetworkServer.connections.Count >= 2;
     float seconds;
     float minutes;
@@ -54,7 +55,7 @@ public class TimeManager : NetworkBehaviour {
             instance.player.GetComponent<Movement>().enabled = false;
             instance.player.GetComponent<CharacterController>().enabled = false;
             instance.UIManager.SetLoseCanvasState(true);
-            instance.SetCursorState(cursorState: false);
+            instance.SetCursorState(cursosVisible: true);
         }
     }
     void AddExtraTime(int hourglasses) {
