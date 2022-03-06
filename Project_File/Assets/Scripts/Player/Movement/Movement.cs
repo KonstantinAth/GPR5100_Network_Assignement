@@ -20,7 +20,7 @@ public class Movement : NetworkBehaviour {
     [SerializeField] Transform checkSphereTransform;
     [SerializeField] float checkSphereRadius = 0.4f;
     [SerializeField] Renderer[] rend;
-    public bool IsRunning;
+    [SyncVar] public bool IsRunning;
     [Header("Animation Settings")]
     Animator characterAnimator;
     Vector3 movement;
@@ -45,7 +45,7 @@ public class Movement : NetworkBehaviour {
             else { OnEnteredPortal?.Invoke(worldToGoNext); }
         }
         if (isServer) {
-            if (!objectInteractionInstance_.triggeredTrap && !objectInteractionInstance_.teleporting) {
+            if (!objectInteractionInstance_.triggeredTrap && !instance.timeManager.triggeredPortal) {
                 Move();
                 ApplyGravity();
                 MovementAnimation();

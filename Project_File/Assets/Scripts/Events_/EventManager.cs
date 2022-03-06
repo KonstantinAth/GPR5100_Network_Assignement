@@ -12,6 +12,14 @@ public class EventManager : MonoBehaviour {
         instance = GameManager._instance;
         InitializeEvents();
     }
+    private void OnDisable()
+    {
+        Trap.OnTrapDeath -= Trap_OnTrapDeath;
+        ObjectInteractions.OnEnteredQuicksand -= ObjectInteractions_OnEnteredQuicksand;
+        ObjectInteractions.OnExitedQuicksand -= ObjectInteractions_OnExitedQuicksand;
+        ObjectInteractions.OnEnteredPortal -= ObjectInteractions_OnEnteredPortal;
+        Movement.OnEnteredPortal -= OnEnteredPortal;
+    }
     void InitializeEvents() {
         Trap.OnTrapDeath += Trap_OnTrapDeath;
         ObjectInteractions.OnEnteredQuicksand += ObjectInteractions_OnEnteredQuicksand;
@@ -53,6 +61,7 @@ public class EventManager : MonoBehaviour {
         instance.player.GetComponent<CharacterController>().enabled = false;
         instance.player.GetComponent<Movement>().enabled = false; 
         instance.player.GetComponent<Animator>().enabled = false;
+        instance.player.IsRunning = false;
         yield return new WaitForSeconds(time);
         instance.player.transform.position = instance.player.startingPosition;
         if (instance.player.isThisServer) activeCamera.cullingMask = instance.cameraFollow.layersToBeCulledIfHost;
@@ -62,11 +71,5 @@ public class EventManager : MonoBehaviour {
         instance.player.GetComponent<Movement>().enabled = true;
         instance.player.GetComponent<Animator>().enabled = true;
     }
-    private void OnDisable() {
-        Trap.OnTrapDeath -= Trap_OnTrapDeath;
-        ObjectInteractions.OnEnteredQuicksand -= ObjectInteractions_OnEnteredQuicksand;
-        ObjectInteractions.OnExitedQuicksand -= ObjectInteractions_OnExitedQuicksand;
-        ObjectInteractions.OnEnteredPortal -= ObjectInteractions_OnEnteredPortal;
-        Movement.OnEnteredPortal -= OnEnteredPortal;
-    }
+   
 }

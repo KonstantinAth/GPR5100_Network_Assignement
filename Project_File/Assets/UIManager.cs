@@ -85,6 +85,7 @@ public class UIManager : MonoBehaviour {
         whoIsActive.SetActive(false);
         instance.entryCamera.SetActive(true);
         if(!lobbyCanvas.activeInHierarchy) lobbyCanvas.SetActive(true);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public void QuitApplication() { Application.Quit(); }
     public void ResumeGame() { Resume(); }
