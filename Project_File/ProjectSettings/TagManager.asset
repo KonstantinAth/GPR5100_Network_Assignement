@@ -13,7 +13,10 @@ TagManager:
   - Asteroid
   - Default
   - Portal
+<<<<<<< HEAD
   - Trap
+=======
+>>>>>>> 6afdacf8fd0ce20a61bd7c70b2f82724a5c2f296
   layers:
   - Default
   - TransparentFX
