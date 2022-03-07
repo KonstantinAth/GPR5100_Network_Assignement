@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-<<<<<<< HEAD
 using System.Collections;
 public class Portal : MonoBehaviour {
     GameManager manager;
@@ -36,12 +35,5 @@ public class Portal : MonoBehaviour {
         worldToGoNext.previousPlayer.gameObject.SetActive(false);
         FindObjectOfType<ObjectInteractions>().teleporting = false;
         manager.timeManager.triggeredPortal = false;
-=======
-public class Portal : MonoBehaviour {
-    GameManager manager;
-    private void Start() { manager = GameManager._instance; }
-    private void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Portal")) { Debug.Log("TRIGGERED"); manager.timeManager.triggeredPortal = true; }
->>>>>>> 6afdacf8fd0ce20a61bd7c70b2f82724a5c2f296
     }
 }

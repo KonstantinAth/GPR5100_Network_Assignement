@@ -5,14 +5,9 @@ using System;
 [RequireComponent(typeof(CharacterController))]
 public class Movement : NetworkBehaviour {
     public World worldToGoNext;
-<<<<<<< HEAD
     public bool isFinalPlayer;
     public GameObject nextPortal;
     //public static event Action<World> OnEnteredPortal;
-=======
-    [SerializeField] bool isFinalPlayer;
-    public static event Action<World> OnEnteredPortal;
->>>>>>> 6afdacf8fd0ce20a61bd7c70b2f82724a5c2f296
     PlayerSoundFX soundFx;
     public Vector3 startingPosition;
     private RaycastHit hit;
@@ -46,14 +41,7 @@ public class Movement : NetworkBehaviour {
     private void OnDisable() { }
     private void Update() {
         if (instance.GameFinished || instance.timeManager.GamePaused) return;
-<<<<<<< HEAD
         if(instance.timeManager.triggeredPortal && isClient) { Debug.Log("TRIGGERED AND I'M THE CLIENT");  }
-=======
-        if(instance.timeManager.triggeredPortal) {
-            if (isFinalPlayer) { instance.GameFinished = true; }
-            else { OnEnteredPortal?.Invoke(worldToGoNext); }
-        }
->>>>>>> 6afdacf8fd0ce20a61bd7c70b2f82724a5c2f296
         if (isServer) {
             if (!objectInteractionInstance_.triggeredTrap && !instance.timeManager.triggeredPortal) {
                 Move();

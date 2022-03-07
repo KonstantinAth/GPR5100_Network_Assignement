@@ -15,8 +15,6 @@ GameObject:
   - component: {fileID: 7933712501166097986}
   - component: {fileID: -4262308554692963386}
   - component: {fileID: 1166829066119823046}
-  - component: {fileID: -139860228920571149}
-  - component: {fileID: -3961191234255281896}
   m_Layer: 9
   m_Name: Asteroid_3
   m_TagString: Asteroid
@@ -145,49 +143,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd63f612b7215e4c95e6e995b3746a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-139860228920571149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8003495884289897023}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 0
-  serverOnly: 0
-  visible: 0
-  m_AssetId: 2408f749a3ad04e23b2abe82997c4b61
-  hasSpawned: 0
---- !u!114 &-3961191234255281896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8003495884289897023}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  clientAuthority: 0
-  sendInterval: 0.003
-  syncPosition: 1
-  syncRotation: 1
-  syncScale: 0
-  interpolatePosition: 1
-  interpolateRotation: 1
-  interpolateScale: 0
-  bufferTimeMultiplier: 1
-  bufferSizeLimit: 64
-  catchupThreshold: 4
-  catchupMultiplier: 0.1
-  showGizmos: 0
-  showOverlay: 0
-  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
