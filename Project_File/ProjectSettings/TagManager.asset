@@ -11,6 +11,9 @@ TagManager:
   - Dirt
   - Bush
   - Asteroid
+  - Default
+  - Portal
+  - Trap
   layers:
   - Default
   - TransparentFX

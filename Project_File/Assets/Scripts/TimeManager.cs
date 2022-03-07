@@ -6,7 +6,12 @@ public class TimeManager : NetworkBehaviour {
     [SerializeField] private float mapTimeInMinutes;
     [SerializeField] TextMeshProUGUI timeText;
     [SerializeField] GameObject GameHUDCanvas;
+    GameManager instance;
     [SyncVar(hook = nameof(InitializeTimeCanvas))] public float timeRemaining;
+    [SyncVar] public int DeathCount;
+    [SyncVar] public bool triggeredPortal;
+    //TODO:
+    public bool GamePaused;
     bool clientAndServerActive => NetworkServer.connections.Count >= 2;
     float seconds;
     float minutes;
@@ -16,25 +21,23 @@ public class TimeManager : NetworkBehaviour {
         Debug.Log("INITIALIZING...");
         GameHUDCanvas.SetActive(true);
         isInitialized = true;
+        instance = GameManager._instance;
         if (isServer) SetTime();
     }
-    private void OnEnable() {
-        Inventory.onRemoveCall += AddExtraTime;
-    }
-    private void OnDisable() {
-        Inventory.onRemoveCall -= AddExtraTime;
-    }
+    private void OnEnable() { Inventory.onRemoveCall += AddExtraTime; }
+    private void OnDisable() { Inventory.onRemoveCall -= AddExtraTime; }
     private void Start() {
         ObjectInit();
         DisplayTime();
     }
     private void Update() {
+        if (instance.GameFinished) return;
         if (isServer) SetTime();
+        //TODO:
+        GamePaused = Input.GetKeyDown(KeyCode.Escape) && !GamePaused ? true : false; 
         DisplayTime();
     }
-    void ObjectInit() {
-        timeRemaining = mapTimeInMinutes * 60;
-    }
+    void ObjectInit() { timeRemaining = mapTimeInMinutes * 60; }
     void SetTime() {
         if (clientAndServerActive) {
             timeRemaining -= Time.deltaTime;
@@ -46,9 +49,13 @@ public class TimeManager : NetworkBehaviour {
         seconds = Mathf.Floor(timeRemaining % 60);
         minutes = Mathf.Floor(timeRemaining / 60);
         timeText.text = $"Time Remaining : {minutes}:{seconds}";
+        if(timeRemaining <= 0) {
+            timeRemaining = 0;
+            instance.player.GetComponent<Movement>().enabled = false;
+            instance.player.GetComponent<CharacterController>().enabled = false;
+            instance.UIManager.SetLoseCanvasState(true);
+            instance.SetCursorState(cursosVisible: true);
+        }
     }
-
-    void AddExtraTime(int hourglasses) {
-        timeRemaining += timeRemaining * hourglasses / 100 * 10;
-    }
+    void AddExtraTime(int hourglasses) { timeRemaining += timeRemaining * hourglasses / 100 * 10; }
 }

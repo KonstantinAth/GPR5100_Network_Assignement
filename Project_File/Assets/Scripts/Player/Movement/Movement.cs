@@ -1,8 +1,13 @@
 using UnityEngine;
 using Mirror;
+using System.Collections;
+using System;
 [RequireComponent(typeof(CharacterController))]
-//[RequireComponent(typeof(NetworkTransform))]
 public class Movement : NetworkBehaviour {
+    public World worldToGoNext;
+    public bool isFinalPlayer;
+    public GameObject nextPortal;
+    //public static event Action<World> OnEnteredPortal;
     PlayerSoundFX soundFx;
     public Vector3 startingPosition;
     private RaycastHit hit;
@@ -16,7 +21,7 @@ public class Movement : NetworkBehaviour {
     [SerializeField] Transform checkSphereTransform;
     [SerializeField] float checkSphereRadius = 0.4f;
     [SerializeField] Renderer[] rend;
-    public bool IsRunning;
+    [SyncVar] public bool IsRunning;
     [Header("Animation Settings")]
     Animator characterAnimator;
     Vector3 movement;
@@ -27,13 +32,18 @@ public class Movement : NetworkBehaviour {
     CharacterController playerController;
     ObjectInteractions objectInteractionInstance_;
     public float startingSpeed;
-    private void Start() {
-        ObjectInit();
+    GameManager instance;
+    public bool isThisServer;
+    private void Start() { ObjectInit(); }
+    private void OnEnable() {
+        startingPosition = transform.position;
     }
-    private void OnEnable() { startingPosition = transform.position; }
+    private void OnDisable() { }
     private void Update() {
+        if (instance.GameFinished || instance.timeManager.GamePaused) return;
+        if(instance.timeManager.triggeredPortal && isClient) { Debug.Log("TRIGGERED AND I'M THE CLIENT");  }
         if (isServer) {
-            if (!objectInteractionInstance_.triggeredTrap && !objectInteractionInstance_.teleporting) {
+            if (!objectInteractionInstance_.triggeredTrap && !instance.timeManager.triggeredPortal) {
                 Move();
                 ApplyGravity();
                 MovementAnimation();
@@ -42,18 +52,14 @@ public class Movement : NetworkBehaviour {
         GroundtypeCheck();
     }
     void ObjectInit() {
-        objectInteractionInstance_ = ObjectInteractions.objectInteractionsInstance;
+        isThisServer = isServer ? true : false;
+        isFinalPlayer = gameObject.name.Equals("Ghost") ? true : false;
         playerController = GetComponent<CharacterController>();
         startingSpeed = moveSpeed;
         characterAnimator = GetComponent<Animator>();
         soundFx = GetComponent<PlayerSoundFX>();
-        #region Might need
-        //if(isClient) {
-        //    for (int i = 0; i < rend.Length; i++) {
-        //        rend[i].enabled = false;
-        //    }
-        //}
-        #endregion
+        instance = GameManager._instance;
+        objectInteractionInstance_ = instance.objectInteractions;
     }
     public void GroundtypeCheck()
     {
@@ -125,9 +131,7 @@ public class Movement : NetworkBehaviour {
             velocity.y += gravity * objectMass * Mathf.Pow(Time.deltaTime, 2);
             playerController.Move(velocity);
         }
-        else {
-            velocity.y = -0.2f;
-        }
+        else { velocity.y = -0.2f; }
     }
     #endregion
     private void OnDrawGizmos() {
